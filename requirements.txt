@@ -8,6 +8,7 @@ django-filter==2.1.0
 django-rest-auth==0.9.3
 djangorestframework==3.9.1
 djongo==1.2.31
+gunicorn==19.9.0
 idna==2.8
 Markdown==3.0.1
 oauthlib==3.0.1
