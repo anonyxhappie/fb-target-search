@@ -42,11 +42,20 @@ class InterestViewSet(viewsets.ModelViewSet):
     def create(self, request):
         data = request.data
         try:
-            interest, _ = Interest.objects.update_or_create(user=request.user, type=data['topic'], path=data['path'], interest_id=data['id'], name=data['name'], audience_size=data['audience_size'])
+            if (Interest.objects.filter(user=request.user, interest_id=data.get('id')).exists()):
+                    return Response({'error:': 'interest already added'}, status=status.HTTP_403_FORBIDDEN)
+            
+            interest = Interest.objects.create(
+                user=request.user, 
+                type=data.get('topic', None), 
+                path=data.get('path', None), 
+                interest_id=data.get('id'), 
+                name=data.get('name', None), 
+                audience_size=data.get('audience_size', None))
             interest.save()
             return Response({'success': 'interest added'}, status=status.HTTP_201_CREATED)
         except KeyError as e:
-            return Response({'key-error:': 'missing ' + str(e)}, status=status.HTTP_403_FORBIDDEN)
+            return Response({'error:': 'missing ' + str(e)}, status=status.HTTP_403_FORBIDDEN)
         except Exception as e:
             return Response({'error:': str(e)}, status=status.HTTP_403_FORBIDDEN)
     
@@ -67,11 +76,21 @@ class RegionViewSet(viewsets.ModelViewSet):
     def create(self, request):
         data = request.data
         try:
-            region, _ = Region.objects.update_or_create(user=request.user, key=data['key'], city=data['name'], region_id=data['region_id'], region=data['region'], country_code=data['country_code'], country_name=data['country_name'])
+            if (Region.objects.filter(user=request.user, region_id=data.get('region_id')).exists()):
+                    return Response({'error:': 'region already added'}, status=status.HTTP_403_FORBIDDEN)
+            
+            region = Region.objects.create(
+                user=request.user, 
+                key=data.get('key', None), 
+                city=data.get('name', None), 
+                region_id=data.get('region_id'), 
+                region=data.get('region', None), 
+                country_code=data.get('country_code', None), 
+                country_name=data.get('country_name', None))
             region.save()
             return Response({'success': 'region added'}, status=status.HTTP_201_CREATED)
         except KeyError as e:
-            return Response({'key-error:': 'missing ' + str(e)}, status=status.HTTP_403_FORBIDDEN)
+            return Response({'error:': 'missing ' + str(e)}, status=status.HTTP_403_FORBIDDEN)
         except Exception as e:
             return Response({'error:': str(e)}, status=status.HTTP_403_FORBIDDEN)
     
