@@ -42,7 +42,7 @@ class InterestViewSet(viewsets.ModelViewSet):
     def create(self, request):
         data = request.data
         try:
-            interest, _ = Interest.objects.update_or_create(user=request.user, path=data['path'], interest_id=data['id'], name=data['name'], audience_size=data['audience_size'])
+            interest, _ = Interest.objects.update_or_create(user=request.user, type=data['topic'], path=data['path'], interest_id=data['id'], name=data['name'], audience_size=data['audience_size'])
             interest.save()
             return Response({'success': 'interest added'}, status=status.HTTP_201_CREATED)
         except KeyError as e:
