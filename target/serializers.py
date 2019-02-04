@@ -4,7 +4,7 @@ from .models import *
 class InterestSerializer(serializers.ModelSerializer):
     class Meta:
         model = Interest
-        exclude = '__all__'
+        fields = '__all__'
 
 class RegionSerializer(serializers.ModelSerializer):
     class Meta:
