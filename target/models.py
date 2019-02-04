@@ -1,4 +1,5 @@
 from djongo import models
+from django.db.models import Q
 from django.contrib.auth.models import User
 
 class TimeStamp(models.Model):

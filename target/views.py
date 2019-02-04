@@ -15,7 +15,7 @@ class RegisterView(viewsets.generics.CreateAPIView):
     def create(self, request):
         data = request.data
         try:
-            if User.objects.filter(username=data['username'], email=data['email']).exists():
+            if User.objects.filter(Q(username=data['username']) & Q(email=data['email'])).exists():
                 return Response({'error': 'user already exist'}, status=status.HTTP_403_FORBIDDEN)
             user = User.objects.create_user(username=data['username'], email=data['email'], password=data['password'])
             user.save()
@@ -42,7 +42,7 @@ class InterestViewSet(viewsets.ModelViewSet):
     def create(self, request):
         data = request.data
         try:
-            if (Interest.objects.filter(user=request.user, interest_id=data.get('id')).exists()):
+            if (data.get('id') and Interest.objects.filter(Q(user=request.user) & Q(interest_id=data.get('id'))).exists()):
                     return Response({'error:': 'interest already added'}, status=status.HTTP_403_FORBIDDEN)
             
             interest = Interest.objects.create(
@@ -76,7 +76,7 @@ class RegionViewSet(viewsets.ModelViewSet):
     def create(self, request):
         data = request.data
         try:
-            if (Region.objects.filter(user=request.user, region_id=data.get('region_id')).exists()):
+            if (data.get('region_id') and Region.objects.filter(Q(user=request.user) & Q(region_id=data.get('region_id'))).exists()):
                     return Response({'error:': 'region already added'}, status=status.HTTP_403_FORBIDDEN)
             
             region = Region.objects.create(
